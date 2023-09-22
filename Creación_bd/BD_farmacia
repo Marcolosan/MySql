@@ -1,1 +1,63 @@
+-- Crear la base de datos para la farmacia
+CREATE DATABASE IF NOT EXISTS farmacia;
+
+-- Usar la base de datos recién creada
+USE farmacia;
+
+-- Crear la tabla para los productos en la farmacia
+CREATE TABLE IF NOT EXISTS productos (
+producto_id INT AUTO_INCREMENT PRIMARY KEY, 
+nombre VARCHAR(255) NOT NULL, 
+descripcion TEXT, 
+precio DECIMAL(10, 2) NOT NULL, 
+stock INT NOT NULL
+);
+
+-- Crear la tabla para los clientes
+CREATE TABLE IF NOT EXISTS clientes (
+    cliente_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    direccion VARCHAR(255),
+    telefono VARCHAR(15)
+);
+
+-- Crear la tabla para las ventas
+CREATE TABLE IF NOT EXISTS ventas (
+    venta_id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_venta DATE NOT NULL,
+    cliente_id INT,
+    total DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id)
+);
+
+-- Crear la tabla para los detalles de las ventas
+CREATE TABLE IF NOT EXISTS detalles_venta (
+    detalle_id INT AUTO_INCREMENT PRIMARY KEY,
+    venta_id INT,
+    producto_id INT,
+    cantidad INT NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (venta_id) REFERENCES ventas(venta_id),
+    FOREIGN KEY (producto_id) REFERENCES productos(producto_id)
+);
+
+-- Crear una tabla para llevar un registro de los proveedores (opcional)
+CREATE TABLE IF NOT EXISTS proveedores (
+    proveedor_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    direccion VARCHAR(255),
+    telefono VARCHAR(15)
+);
+
+-- Crear una tabla para gestionar el suministro de productos (opcional)
+CREATE TABLE IF NOT EXISTS suministro (
+    suministro_id INT AUTO_INCREMENT PRIMARY KEY,
+    proveedor_id INT,
+    producto_id INT,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    fecha_suministro DATE NOT NULL,
+    FOREIGN KEY (proveedor_id) REFERENCES proveedores(proveedor_id),
+    FOREIGN KEY (producto_id) REFERENCES productos(producto_id)
+);
 
